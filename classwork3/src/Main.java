@@ -1,63 +1,19 @@
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
+import java.io.FileWriter;
 
 public class Main {
+    public static void main(String[] args) throws Exception {
 
-  public static void main(String[] args) throws Exception {
+        String svg =
+                "<svg width=\"400\" height=\"300\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
 
-    int W = 400;
-    int H = 300;
+                        "  <path d=\"M 400 0 L 0 0 L 400 300 Z\" fill=\"red\"/>\n" +
 
-    BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
+                        "  <path d=\"M 0 0 L 0 300 L 400 300 Z\" fill=\"blue\"/>\n" +
 
-    // background
-    for (int y = 0; y < H; y++) {
-      for (int x = 0; x < W; x++) {
-        img.setRGB(x, y, Color.WHITE.getRGB());
-      }
+                        "</svg>";
+
+        FileWriter writer = new FileWriter("triangles.svg");
+        writer.write(svg);
+        writer.close();
     }
-
-    // sun
-    int sunX = 85;
-    int sunY = 70;
-    int r = 38;
-
-    for (int y = -r; y <= r; y++) {
-      for (int x = -r; x <= r; x++) {
-        if (x * x + y * y <= r * r) {
-          img.setRGB(sunX + x, sunY + y, Color.YELLOW.getRGB());
-        }
-      }
-    }
-
-    // ray
-    Color ray = Color.RED;
-
-    for (int i = 45; i <= 70; i++) {
-      img.setRGB(sunX, sunY - i, ray.getRGB()); // up
-      img.setRGB(sunX, sunY + i, ray.getRGB()); // down
-      img.setRGB(sunX - i, sunY, ray.getRGB()); // left
-      img.setRGB(sunX + i, sunY, ray.getRGB()); // ri
-    }
-
-    for (int i = 32; i <= 55; i++) {
-      img.setRGB(sunX + i, sunY + i, ray.getRGB());
-      img.setRGB(sunX - i, sunY + i, ray.getRGB());
-      img.setRGB(sunX + i, sunY - i, ray.getRGB());
-      img.setRGB(sunX - i, sunY - i, ray.getRGB());
-    }
-
-    // green
-    for (int x = 0; x < W; x++) {
-      int wave = (int)(10 * Math.sin(x * 0.12));
-
-      for (int y = 185 + wave; y < H; y++) {
-        img.setRGB(x, y, Color.GREEN.getRGB());
-      }
-    }
-
-    ImageIO.write(img, "png", new File("classwork01.png"));
-  }
 }
